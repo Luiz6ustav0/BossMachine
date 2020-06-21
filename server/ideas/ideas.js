@@ -26,7 +26,23 @@ ideasRouter.put('/:ideaId', (req, res, next) => {
     res.send(updatedIdea);
 });
 
-ideasRouter.post('/', (req, res, next) => {});
+ideasRouter.post('/', (req, res, next) => {
+    const info = req.body;
+    if(info){
+        const newIdea = db.addToDatabase('ideas', info);
+        res.status(201).send(newIdea);
+    }
+    res.status(400).send("Bad Request")
+});
 
-ideasRouter.delete('/', (req, res, next) => {});
+ideasRouter.delete('/:ideaId', (req, res, next) => {
+    const deletedIdea = db.deleteFromDatabasebyId('ideas', req.idea.id);
+    if(deletedIdea){
+        res.sendStatus(204);
+    } else {
+        res.status(500).send('Error Deleting Idea');
+    }
+});
+
+
 module.exports = ideasRouter;
